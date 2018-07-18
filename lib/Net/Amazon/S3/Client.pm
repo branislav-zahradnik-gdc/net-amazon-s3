@@ -17,7 +17,45 @@ __PACKAGE__->meta->make_immutable;
 
 sub bucket_class { 'Net::Amazon::S3::Client::Bucket' }
 
+sub _build_bucket {
+    my ($self, %params) = @_;
+
+    $self->bucket_class->new (
+        client => $self,
+        name   => $params{name},
+        creation_date => $params{creation_date},
+        owner_id           => $params{owner_id},
+        owner_display_name => $params{owner_displayname},
+    );
+}
+
 sub buckets {
+    my ($self) = @_;
+
+    my $operation = Net::Amazon::S3::Operation::Service::Buckets::List->new (
+        s3 => $self->s3,
+        error_handler_class => 'Net::Amazon::S3::Error::Handler::Confess',
+    );
+
+    my $response = $operation->response;
+    return unless $response;
+
+    my $owner_id           = $response->data->{owner_id};
+    my $owner_display_name = $response->data->{owner_displayname};
+
+    my @buckets;
+    foreach my $bucket ( @{ $response->data->{buckets} } ) {
+        push @buckets, $self->_build_bucket (
+            name   => $bucket->{name},
+            creation_date => $bucket->{creation_date},
+            owner_id          => $owner_id,
+            owner_displayname => $owner_display_name,
+        );
+    }
+    return @buckets;
+}
+
+sub buckets_old {
     my $self = shift;
     my $s3   = $self->s3;
 

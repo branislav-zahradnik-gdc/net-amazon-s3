@@ -11,6 +11,10 @@ use constant AMAZON_S3_NAMESPACE_URI => 'http://s3.amazonaws.com/doc/2006-03-01/
 
 use namespace::clean;
 
+has s3 => (
+    is => 'ro',
+);
+
 has http_response => (
     is => 'ro',
     handles => [

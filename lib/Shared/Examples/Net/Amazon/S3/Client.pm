@@ -74,6 +74,18 @@ sub _mock_http_response {
         }
     );
 
+    $guard->replace (
+        'Net::Amazon::S3::_do_http' => sub {
+            ${ $params{into} } = $_[1];
+            HTTP::Response->new (
+                $params{with_response_code},
+                HTTP::Status::status_message ($params{with_response_code}),
+                [ %headers ],
+                $params{with_response_data},
+            ),
+        }
+    );
+
     $guard;
 }
 

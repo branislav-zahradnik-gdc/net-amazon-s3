@@ -337,30 +337,38 @@ sub bucket_class {
     'Net::Amazon::S3::Bucket'
 }
 
-sub buckets {
-    my $self = shift;
+sub _build_bucket {
+    my ($self, %params) = @_;
 
-    my $response = $self->_fetch_response (
-        response_class => 'Net::Amazon::S3::Operation::Service::List::Response',
-        request_class  => 'Net::Amazon::S3::Operation::Service::List::Request',
-        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+    $self->bucket_class->new (
+        bucket => $params{name},
+        creation_date => $params{creation_date},
+        account => $self,
+    );
+}
+
+sub buckets {
+    my ($self) = @_;
+
+    my $operation = Net::Amazon::S3::Operation::Service::Buckets::List->new (
+        s3 => $self,
+        error_handler => Net::Amazon::S3::Error::Handler::Legacy->new (s3 => $self),
     );
 
-    return if $response->is_error;
+    my $response = $operation->response;
+    return unless $response;
 
-    my $owner_id          = $response->owner_id;;
-    my $owner_displayname = $response->owner_displayname;
+    my $owner_id          = $response->data->{owner_id};
+    my $owner_displayname = $response->data->{owner_displayname};
 
     my @buckets;
-    foreach my $bucket ( $response->buckets ) {
-        push @buckets,
-            $self->bucket_class->new(
-            {   bucket => $bucket->{name},
-                creation_date => $bucket->{creation_date},
-                account => $self,
-            }
-            );
-
+    foreach my $bucket ( @{ $response->data->{buckets} } ) {
+        push @buckets, $self->_build_bucket (
+            owner_id => $owner_id,
+            owner_displayname => $owner_displayname,
+            name => $bucket->{name},
+            creation_date => $bucket->{creation_date},
+        );
     }
     return {
         owner_id          => $owner_id,
