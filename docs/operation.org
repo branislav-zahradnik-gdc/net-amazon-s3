@@ -1,0 +1,151 @@
+
+* [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTServiceOps.html][Operations on Service]]
+
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTServiceGET.html][GET Service - Operation::Service::Bucket::List]] [0/7]
+    - [ ] Request
+    - [ ] Response
+    - [ ] Operation
+    - [ ] API tests
+    - [ ] API documentation
+    - [ ] Client tests
+    - [ ] Client documentation
+    List all buckets
+
+* [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketOps.html][Operations on Buckets]]
+
+  - [-] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETE.html][DELETE Bucket - Operation::Bucket::Delete]] [1/7]
+    - [X] Request
+    - [ ] Response
+    - [ ] Operation
+    - [ ] API tests
+    - [ ] API documentation
+    - [ ] Client tests
+    - [ ] Client documentation
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEAnalyticsConfiguration.html][DELETE Bucket analytics]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEcors.html][DELETE Bucket cors]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEencryption.html][DELETE Bucket encryption]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEInventoryConfiguration.html][DELETE Bucket inventory]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETElifecycle.html][DELETE Bucket lifecycle]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEPublicAccessBlock.html][DELETE PublicAccessBlock]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTDeleteBucketMetricsConfiguration.html][DELETE Bucket metric]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEpolicy.html][DELETE Bucket policy]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEreplication.html][DELETE Bucket replication]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEtagging.html][DELETE Bucket tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketDELETEwebsite.html][DELETE Bucket website]]
+  - [-] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html][GET Bucket (List Objects) Version 1 - Operation::Bucket::Objects::List]] [1/7]
+    - [X] Request
+    - [ ] Response
+    - [ ] Operation
+    - [ ] API tests
+    - [ ] API documentation
+    - [ ] Client tests
+    - [ ] Client documentation
+      obsoleted
+      up to 1_000 objects
+      !!! A 200 OK response can contain valid or invalid XML
+    - parameters
+      - delimiter
+      - encodingtype
+      - marker
+      - max-keys
+      - prefix
+    - request headers - Common
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/v2-RESTBucketGET.html][GET Bucket (List Objects) Version 2 - Operation::Bucket::Objects::List2]] [0/7]
+    - [ ] Request
+    - [ ] Response
+    - [ ] Operation
+    - [ ] API tests
+    - [ ] API documentation
+    - [ ] Client tests
+    - [ ] Client documentation
+    - parameters
+      - list-type=2
+      - delimiter
+      - encoding-type
+      - max-keys
+      - prefix
+      - continuation-token (was: marker)
+      - fetch-owner (true/false, default false)
+      - start-after
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETaccelerate.html][GET Bucket accelerate]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETacl.html][GET Bucket acl]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETAnalyticsConfig.html][GET Bucket analytics]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETcors.html][GET Bucket cors]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETencryption.html][GET Bucket encryption]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html][GET Bucket inventory]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlifecycle.html][GET Bucket lifecycle]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlocation.html][GET Bucket location]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETPublicAccessBlock.html][GET PublicAccessBlock]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlogging.html][GET Bucket logging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETMetricConfiguration.html][GET Bucket metrics]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETnotification.html][GET Bucket notification]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETObjectLockConfiguration.html][GET Bucket object lock configuration]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETPolicyStatus.html][GET BucketPolicyStatus]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETVersion.html][GET Bucket Object versions]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETpolicy.html][GET Bucket policy]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETpolicy.html][GET Bucket replication]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTrequestPaymentGET.html][GET Bucket requestPayment]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETtagging.html][GET Bucket tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETversioningStatus.html][GET Bucket versioning]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETwebsite.html][GET Bucket website]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketHEAD.html][HEAD Bucket]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketListAnalyticsConfigs.html][List Bucket Analytics Configurations]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketListInventoryConfigs.html][List Bucket Inventory Configurations]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTListBucketMetricsConfiguration.html][List Bucket Metrics Configurations]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadListMPUpload.html][List Multipart Uploads]]
+  - [-] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadListMPUpload.html][PUT Bucket - Operation::Bucket::Create]] [1/7]
+    - [X] Request
+    - [ ] Response
+    - [ ] Operation
+    - [ ] API tests
+    - [ ] API documentation
+    - [ ] Client tests
+    - [ ] Client documentation
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadListMPUpload.html][PUT Bucket accelerate]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTacl.html][PUT Bucket acl]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTAnalyticsConfig.html][PUT Bucket analytics]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTcors.html][PUT Bucket cors]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html][PUT Bucket encryption]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTInventoryConfig.html][PUT Bucket inventory]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html][PUT Bucket lifecycle]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTPublicAccessBlock.html][PUT PublicAccessBlock]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html][PUT Bucket logging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html][PUT Bucket metrics]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTnotification.html][PUT Bucket notification]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTObjectLockConfiguration.html][PUT Bucket object lock configuration]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTpolicy.html][PUT Bucket policy]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html][PUT Bucket replication]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTrequestPaymentPUT.html][PUT Bucket requestPayment]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTtagging.html][PUT Bucket tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html][PUT Bucket versioning]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTwebsite.html][PUT Bucket website]]
+
+* [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectOps.html][Operations On Objects]]
+
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/multiobjectdeleteapi.html][Delete Multiple Objects]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html][DELETE Object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETEtagging.html][DELETE Object tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html][GET Object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGETacl.html][GET Object ACL]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGETLegalHold.html][GET Object legal hold]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGETRetention.html][GET Object retention]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGETtagging.html][GET Object tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGETtorrent.html][GET Object torrent]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectHEAD.html][HEAD Object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTOPTIONSobject.html][OPTIONS object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOST.html][POST Object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOSTrestore.html][POST Object restore]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html][PUT Object]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUTLegalHold.html][PUT Object legal hold]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUTRetention.html][PUT Object retention]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectCOPY.html][PUT Object - Copy]]
+      If the error occurs during the copy operation, the error response is embedded in the 200 OK response. This means that a 200 OK response can contain either a success or an error.
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUTacl.html][PUT Object acl]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUTtagging.html][PUT Object tagging]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html][SELECT Object Content]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadAbort.html][Abort Multipart Upload]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadComplete.html][Complete Multipart Upload]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadInitiate.html][Initiate Multipart Upload]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadListParts.html][List Parts]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPart.html][Upload Part]]
+  - [ ] [[https://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPartCopy.html][Upload Part - Copy]]
