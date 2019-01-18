@@ -1,0 +1,8 @@
+
+Operation workflow
+  - Request->new (context => $self, %params)
+  - request->response
+    Response::*->parse
+    context->error_handler () if $self (response) ->is_error
+  - return unless $response->is_success
+  - build / return $response->data

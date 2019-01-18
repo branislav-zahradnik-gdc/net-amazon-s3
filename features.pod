@@ -1,0 +1,87 @@
+
+=pod
+
+=head1 API COMPARISON
+
+Error reportings
+
+|-----------------------+----------------------------+--------------------------|
+| operation             | Net::Amazon::S3 (API)      | Net::Amazon::S3::Client  |
+|-----------------------+----------------------------+--------------------------|
+| service-buckets-list  |                            |                          |
+| - returns             | Bucket instances in struct | Bucket instances (list)  |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| bucket-acl-get        |                            |                          |
+| - returns             | response body (XML)        | response body (XML)      |
+|                       | (undef on Not Found)       |                          |
+| - errors              | set network error          | confess                  |
+|                       | (none on Not Found)        |                          |
+|-----------------------+----------------------------+--------------------------|
+| bucket-acl-set        |                            |                          |
+| - with canned acl     | yes, as acl_short          | N/A                      |
+| - with xml acl        | yes, as acl_xml            | N/A                      |
+| - returns             | boolean                    | N/A                      |
+| - errors              | set S3 err                 | N/A                      |
+|-----------------------+----------------------------+--------------------------|
+| bucket-create         |                            |                          |
+| - with region         | yes                        | yes                      |
+| - returns             | Bucket instance            | Bucket instance          |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| bucket-delete         |                            |                          |
+| - returns             | boolean                    | true                     |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| bucket-objects-list   |                            |                          |
+| - list version 1      | yes                        | yes                      |
+| - list version 2      | no                         | no                       |
+| - common prefixes     | supported                  | not supported            |
+| - list all            | list all method            | yes                      |
+| - returns             | struct with list           | iterator (Object list)   |
+| - errors              | set S3 err                 | confess during iteration |
+|-----------------------+----------------------------+--------------------------|
+| bucket-objects-delete |                            |                          |
+| - returns             | boolean                    | HTTP::Response object    |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| object-acl-get        |                            |                          |
+| - returns             | response body (XML)        | N/A                      |
+|                       | (undef on Not Found)       | N/A                      |
+| - errors              | set network error          | N/A                      |
+|                       | (none on Not Found)        | N/A                      |
+|-----------------------+----------------------------+--------------------------|
+| object-acl-set        |                            |                          |
+| - with canned acl     | yes, as acl_short          | N/A                      |
+| - with xml acl        | yes, as acl_xml            | N/A                      |
+| - returns             | boolean                    | N/A                      |
+| - errors              | set S3 err                 | N/A                      |
+|-----------------------+----------------------------+--------------------------|
+| object-create         |                            |                          |
+| - returns             | boolean                    | empty string             |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| object-delete         |                            |                          |
+| - returns             | boolean                    | true                     |
+| - errors              | set S3 err                 | confess                  |
+|-----------------------+----------------------------+--------------------------|
+| object-fetch          |                            |                          |
+| - returns             | struct with value          | value                    |
+|                       | (undef on Not Found)       |                          |
+| - errors              | set network error          | throws                   |
+|                       | (none on Not Found)        |                          |
+|-----------------------+----------------------------+--------------------------|
+| object-head           |                            |                          |
+| - returns             | boolean                    | N/A                      |
+| - errors              | set S3 err                 | N/A                      |
+|-----------------------+----------------------------+--------------------------|
+
+- object-copy
+- object-upload-multi
+- object-create-file
+- object-fetch-file
+- bucket-region
+- multiple requests support
+  - list-all
+  - bucket-objects-delete
+    - more than 1000 elements
