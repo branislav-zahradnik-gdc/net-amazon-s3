@@ -1,0 +1,39 @@
+
+* Net::Amazon::S3 [0/16]
+  - [ ] all operations
+    - [ ] Request / Response operation mapping
+      existing operations into Request / Response pairs
+    - [ ] Error handler
+      report error based on client behaviour
+    - [ ] wrap Request / Response / Error handler into Operation
+  - [ ] pluggable operation set (builder)
+    - list version 2
+    - V4 support
+    - amazon headers support
+    - multipart support
+  - [ ] global Signature V4 for AWS
+  - [ ] investigate 100 Header (see docu)
+  - [ ] GetObject - test uri
+  - [ ] Expire object (relative / absolute)
+  - [ ] Part object (build from etags and parts)
+  - [ ] ACL object
+    - acl-short (canned)
+    - acl-headers
+    - acl-xml
+  - [ ] Test::Deep::expect uri
+  - [ ] travis.yml
+    - [ ] perlbrew-ng (with dzil support)
+  - [ ] Example => Shared::Examples
+    - [ ] open discussion "production / development"
+  - [ ] constraint Keys array (max 1000)
+  - [ ] deduplicate xpc context builder
+  - [ ] file tests
+  - [ ] operation fixtures integration tests
+  - [ ] async
+
+* Net::Amazon::S3 Context::Singleton
+
+  - singleton XYZ provides ABC via transformation
+  - contrive XYZ aggregate => as { }
+    - singleton XYZ aggregate ???
+  - deduce aggregate (returns list of all values)
