@@ -689,6 +689,15 @@ sub _head_region {
     return $response->header( 'x-amz-bucket-region' );
 }
 
+sub _fetch_response {
+    my ($self, @params) = @_;
+
+    $self->account->_fetch_response (
+        bucket => $self,
+        @params,
+    );
+}
+
 1;
 
 __END__

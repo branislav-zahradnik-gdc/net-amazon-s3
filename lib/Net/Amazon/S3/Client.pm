@@ -117,6 +117,20 @@ sub _send_request_xpc {
     return $self->s3->_xpc_of_content( $http_response->content );
 }
 
+sub _fetch_response {
+    my ($self, %params) = @_;
+
+    my $request_class  = delete $params{request_class};
+    my $response_class = delete $params{response_class};
+    my $filename       = delete $params{filename};
+
+    my $request       = $request_class->new (s3 => $self->s3, %params);
+    my $http_response = $self->_send_request_raw ($request->http_request, $filename);
+    my $response      = $response_class->new (http_response => $http_response);
+
+    return $response;
+}
+
 1;
 
 __END__

@@ -183,6 +183,14 @@ sub object {
     );
 }
 
+sub _fetch_response {
+    my ($self, @params) = @_;
+
+    $self->client->_fetch_response (
+        bucket => $self->name,
+        @params,
+    );
+}
 
 1;
 

@@ -770,6 +770,19 @@ sub _send_request {
     return $self->_xpc_of_content($content);
 }
 
+sub _fetch_response {
+    my ($self, %params) = @_;
+
+    my $request_class = delete $params{request_class};
+    my $response_class = delete $params{response_class};
+
+    my $request       = $request_class->new (s3 => $self, %params);
+    my $http_response = $self->_do_http ($request->http_request);
+    my $response      = $response_class->new (http_response => $http_response);
+
+    return $response;
+}
+
 # centralize all HTTP work, for debugging
 sub _do_http {
     my ( $self, $http_request, $filename ) = @_;

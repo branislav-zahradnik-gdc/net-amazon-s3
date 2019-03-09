@@ -410,6 +410,15 @@ sub _is_multipart_etag {
     return 1 if($etag =~ /\-\d+$/);
 }
 
+sub _fetch_response {
+    my ($self, @params) = @_;
+
+    $self->bucket->_fetch_response (
+        key => $self->key,
+        @params,
+    );
+}
+
 1;
 
 __END__
