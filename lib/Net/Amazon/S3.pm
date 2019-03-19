@@ -744,21 +744,22 @@ sub delete_key {
     return $bucket->delete_key( $conf->{key} );
 }
 
-sub _fetch_response {
-    my ($self, %params) = @_;
+sub _default_error_handler_class {
+    return 'Net::Amazon::S3::Error::Handler::Status';
+}
 
-    my $request_class = delete $params{request_class};
-    my $response_class = delete $params{response_class};
-    my $error_handler = delete $params{error_handler};
+sub _do_operation {
+    my ($self, $operation_class, %request_params) = @_;
 
-    my $request       = $request_class->new (s3 => $self, %params);
-    my $http_response = $self->_do_http ($request->http_request);
-    my $response      = $response_class->new (http_response => $http_response);
+    my $error_handler_class = delete $request_params{error_handler_class}
+        || $self->_default_error_handler_class;
 
-    $error_handler->new (s3 => $self)->handle_error ($response)
-        if $error_handler;
+    my $operation = $operation_class->new (
+        s3 => $self,
+        error_handler_class => $error_handler_class,
+    );
 
-    return $response;
+    return $operation->response (%request_params);
 }
 
 # centralize all HTTP work, for debugging

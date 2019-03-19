@@ -76,22 +76,24 @@ sub _send_request_raw {
     return $self->s3->ua->request( $http_request, $filename );
 }
 
-sub _fetch_response {
-    my ($self, %params) = @_;
 
-    my $request_class  = delete $params{request_class};
-    my $response_class = delete $params{response_class};
-    my $error_handler  = delete $params{error_handler};
-    my $filename       = delete $params{filename};
+sub _default_error_handler_class {
+    return 'Net::Amazon::S3::Error::Handler::Throw::Error';
+}
 
-    my $request       = $request_class->new (s3 => $self->s3, %params);
-    my $http_response = $self->_send_request_raw ($request->http_request, $filename);
-    my $response      = $response_class->new (http_response => $http_response);
+sub _do_operation {
+    my ($self, $operation_class, %request_params) = @_;
 
-    $error_handler->new (s3 => $self->s3)->handle_error ($response)
-        if $error_handler;
+    my $http_response = $self->_send_request ($http_request, $filename);
+    my $error_handler_class = delete $request_params{error_handler_class}
+        || $self->_default_error_handler_class;
 
-    return $response;
+    my $operation = $operation_class->new (
+        s3 => $self,
+        error_handler_class => $error_handler_class,
+    );
+
+    return $operation->response (%request_params);
 }
 
 1;
