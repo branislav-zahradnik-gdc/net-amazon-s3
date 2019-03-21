@@ -122,11 +122,15 @@ sub _fetch_response {
 
     my $request_class  = delete $params{request_class};
     my $response_class = delete $params{response_class};
+    my $error_handler  = delete $params{error_handler};
     my $filename       = delete $params{filename};
 
     my $request       = $request_class->new (s3 => $self->s3, %params);
     my $http_response = $self->_send_request_raw ($request->http_request, $filename);
     my $response      = $response_class->new (http_response => $http_response);
+
+    $error_handler->new (s3 => $self->s3)->handle_error ($response)
+        if $error_handler;
 
     return $response;
 }

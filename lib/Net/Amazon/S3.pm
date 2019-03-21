@@ -113,6 +113,7 @@ use Net::Amazon::S3::Bucket;
 use Net::Amazon::S3::Client;
 use Net::Amazon::S3::Client::Bucket;
 use Net::Amazon::S3::Client::Object;
+use Net::Amazon::S3::Error::Handler::Legacy;
 use Net::Amazon::S3::HTTPRequest;
 use Net::Amazon::S3::Request;
 use Net::Amazon::S3::Request::AbortMultipartUpload;
@@ -775,10 +776,14 @@ sub _fetch_response {
 
     my $request_class = delete $params{request_class};
     my $response_class = delete $params{response_class};
+    my $error_handler = delete $params{error_handler};
 
     my $request       = $request_class->new (s3 => $self, %params);
     my $http_response = $self->_do_http ($request->http_request);
     my $response      = $response_class->new (http_response => $http_response);
+
+    $error_handler->new (s3 => $self)->handle_error ($response)
+        if $error_handler;
 
     return $response;
 }
