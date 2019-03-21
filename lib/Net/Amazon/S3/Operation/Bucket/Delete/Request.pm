@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::DeleteBucket;
+package Net::Amazon::S3::Operation::Bucket::Delete::Request;
 
 use Moose 0.85;
 extends 'Net::Amazon::S3::Request::Bucket';
@@ -18,7 +18,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::DeleteBucket->new(
+  my $http_request = Net::Amazon::S3::Operation::Bucket::Delete::Request->new(
     s3     => $s3,
     bucket => $bucket,
   )->http_request;

@@ -118,7 +118,6 @@ use Net::Amazon::S3::HTTPRequest;
 use Net::Amazon::S3::Request;
 use Net::Amazon::S3::Request::AbortMultipartUpload;
 use Net::Amazon::S3::Request::CompleteMultipartUpload;
-use Net::Amazon::S3::Request::DeleteBucket;
 use Net::Amazon::S3::Request::DeleteMultiObject;
 use Net::Amazon::S3::Request::DeleteObject;
 use Net::Amazon::S3::Request::GetBucketAccessControl;
@@ -136,6 +135,8 @@ use Net::Amazon::S3::Operation::Service::List::Request;
 use Net::Amazon::S3::Operation::Service::List::Response;
 use Net::Amazon::S3::Operation::Bucket::Create::Request;
 use Net::Amazon::S3::Operation::Bucket::Create::Response;
+use Net::Amazon::S3::Operation::Bucket::Delete::Request;
+use Net::Amazon::S3::Operation::Bucket::Delete::Response;
 use Net::Amazon::S3::Signature::V2;
 use Net::Amazon::S3::Signature::V4;
 use LWP::UserAgent::Determined;
@@ -440,12 +441,17 @@ sub delete_bucket {
     }
     croak 'must specify bucket' unless $bucket;
 
-    my $http_request = Net::Amazon::S3::Request::DeleteBucket->new(
-        s3     => $self,
-        bucket => $bucket,
-    )->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Bucket::Delete::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Bucket::Delete::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
 
-    return $self->_send_request_expect_nothing($http_request);
+        bucket => $bucket,
+    );
+
+    return if $response->is_error;
+
+    return 1;
 }
 
 =head2 list_bucket
