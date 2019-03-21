@@ -118,7 +118,6 @@ use Net::Amazon::S3::HTTPRequest;
 use Net::Amazon::S3::Request;
 use Net::Amazon::S3::Request::AbortMultipartUpload;
 use Net::Amazon::S3::Request::CompleteMultipartUpload;
-use Net::Amazon::S3::Request::CreateBucket;
 use Net::Amazon::S3::Request::DeleteBucket;
 use Net::Amazon::S3::Request::DeleteMultiObject;
 use Net::Amazon::S3::Request::DeleteObject;
@@ -135,6 +134,8 @@ use Net::Amazon::S3::Request::SetBucketAccessControl;
 use Net::Amazon::S3::Request::SetObjectAccessControl;
 use Net::Amazon::S3::Operation::Service::List::Request;
 use Net::Amazon::S3::Operation::Service::List::Response;
+use Net::Amazon::S3::Operation::Bucket::Create::Request;
+use Net::Amazon::S3::Operation::Bucket::Create::Response;
 use Net::Amazon::S3::Signature::V2;
 use Net::Amazon::S3::Signature::V4;
 use LWP::UserAgent::Determined;
@@ -378,15 +379,17 @@ Returns 0 on failure, Net::Amazon::S3::Bucket object on success
 sub add_bucket {
     my ( $self, $conf ) = @_;
 
-    my $http_request = Net::Amazon::S3::Request::CreateBucket->new(
-        s3                  => $self,
+    my $response = $self->_fetch_response(
+        response_class => 'Net::Amazon::S3::Operation::Bucket::Create::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
         bucket              => $conf->{bucket},
         acl_short           => $conf->{acl_short},
         location_constraint => $conf->{location_constraint},
-    )->http_request;
+    );
 
-    return 0
-        unless $self->_send_request_expect_nothing($http_request);
+    return if $response->is_error;
 
     return $self->bucket( $conf->{bucket} );
 }

@@ -26,14 +26,18 @@ __PACKAGE__->meta->make_immutable;
 sub _create {
     my ( $self, %conf ) = @_;
 
-    my $http_request = Net::Amazon::S3::Request::CreateBucket->new(
-        s3                  => $self->client->s3,
-        bucket              => $self->name,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Bucket::Create::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
         acl_short           => $conf{acl_short},
         location_constraint => $conf{location_constraint},
-    )->http_request;
+    );
 
-    $self->client->_send_request($http_request);
+    return $response->is_error;
+
+    return $response->http_response;
 }
 
 sub delete {

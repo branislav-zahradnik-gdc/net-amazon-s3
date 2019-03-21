@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::CreateBucket;
+package Net::Amazon::S3::Operation::Bucket::Create::Request;
 
 use Moose 0.85;
 extends 'Net::Amazon::S3::Request::Bucket';
@@ -43,7 +43,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::CreateBucket->new(
+  my $http_request = Net::Amazon::S3::Operation::Bucket::Create::Request->new(
     s3                  => $s3,
     bucket              => $bucket,
     acl_short           => $acl_short,

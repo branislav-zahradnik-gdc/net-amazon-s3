@@ -14,7 +14,7 @@ use Shared::Examples::Net::Amazon::S3::Operation::Bucket::Create (
 );
 
 behaves_like_net_amazon_s3_request 'create bucket' => (
-    request_class   => 'Net::Amazon::S3::Request::CreateBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
     with_bucket     => 'some-bucket',
 
     expect_request_method   => 'PUT',
@@ -24,7 +24,7 @@ behaves_like_net_amazon_s3_request 'create bucket' => (
 );
 
 behaves_like_net_amazon_s3_request 'create bucket with acl' => (
-    request_class   => 'Net::Amazon::S3::Request::CreateBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
     with_bucket     => 'some-bucket',
     with_acl_short  => 'private',
 
@@ -35,7 +35,7 @@ behaves_like_net_amazon_s3_request 'create bucket with acl' => (
 );
 
 behaves_like_net_amazon_s3_request 'create bucket in region' => (
-    request_class   => 'Net::Amazon::S3::Request::CreateBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
     with_bucket     => 'some-bucket',
     with_location_constraint => 'ca-central-1',
 
@@ -46,7 +46,7 @@ behaves_like_net_amazon_s3_request 'create bucket in region' => (
 );
 
 behaves_like_net_amazon_s3_request 'create bucket in region with acl' => (
-    request_class   => 'Net::Amazon::S3::Request::CreateBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Create::Request',
     with_bucket     => 'some-bucket',
     with_acl_short  => 'private',
     with_location_constraint => 'ca-central-1',
