@@ -98,51 +98,36 @@ sub list {
 
             return undef if $end;
 
-            my $http_request = Net::Amazon::S3::Request::ListBucket->new(
-                s3     => $self->client->s3,
-                bucket => $self->name,
+            my $response = $self->_fetch_response(
+                response_class => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Response',
+                request_class  => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
+                error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
                 marker => $marker,
                 prefix => $prefix,
                 delimiter => $delimiter,
-            )->http_request;
+            );
 
-            my $xpc = $self->client->_send_request_xpc($http_request);
+            return if $response->is_error;
 
             my @objects;
-            foreach my $node (
-                $xpc->findnodes('/s3:ListBucketResult/s3:Contents') )
-            {
-                my $etag = $xpc->findvalue( "./s3:ETag", $node );
-                $etag =~ s/^"//;
-                $etag =~ s/"$//;
-
- #            storage_class => $xpc->findvalue( ".//s3:StorageClass", $node ),
- #            owner_id      => $xpc->findvalue( ".//s3:ID",           $node ),
- #            owner_displayname =>
- #                $xpc->findvalue( ".//s3:DisplayName", $node ),
-
+            foreach my $node ($response->contents) {
                 push @objects,
                     $self->object_class->new(
                     client => $self->client,
                     bucket => $self,
-                    key    => $xpc->findvalue( './s3:Key', $node ),
-                    last_modified_raw =>
-                        $xpc->findvalue( './s3:LastModified', $node ),
-                    etag => $etag,
-                    size => $xpc->findvalue( './s3:Size', $node ),
+                    key    => $node->{key},
+                    last_modified_raw => $node->{last_modified},
+                    etag => $node->{etag},
+                    size => $node->{size},
                     );
             }
 
             return undef unless @objects;
 
-            my $is_truncated
-                = scalar $xpc->findvalue(
-                '/s3:ListBucketResult/s3:IsTruncated') eq 'true'
-                ? 1
-                : 0;
-            $end = 1 unless $is_truncated;
+            $end = 1 unless $response->is_truncated;
 
-            $marker = $xpc->findvalue('/s3:ListBucketResult/s3:NextMarker')
+            $marker = $response->next_marker
                 || $objects[-1]->key;
 
             return \@objects;

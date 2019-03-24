@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'list bucket' => (
-    request_class   => 'Net::Amazon::S3::Request::ListBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
     with_bucket     => 'some-bucket',
 
     expect_request_method   => 'GET',
@@ -19,7 +19,7 @@ behaves_like_net_amazon_s3_request 'list bucket' => (
 );
 
 behaves_like_net_amazon_s3_request 'list bucket with prefix' => (
-    request_class   => 'Net::Amazon::S3::Request::ListBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
     with_bucket     => 'some-bucket',
     with_prefix     => 'some-prefix',
 
@@ -30,7 +30,7 @@ behaves_like_net_amazon_s3_request 'list bucket with prefix' => (
 );
 
 behaves_like_net_amazon_s3_request 'list bucket with delimiter' => (
-    request_class   => 'Net::Amazon::S3::Request::ListBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
     with_bucket     => 'some-bucket',
     with_delimiter  => '&',
 
@@ -41,7 +41,7 @@ behaves_like_net_amazon_s3_request 'list bucket with delimiter' => (
 );
 
 behaves_like_net_amazon_s3_request 'list bucket with max-keys' => (
-    request_class   => 'Net::Amazon::S3::Request::ListBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
     with_bucket     => 'some-bucket',
     with_max_keys   => '200',
 
@@ -52,7 +52,7 @@ behaves_like_net_amazon_s3_request 'list bucket with max-keys' => (
 );
 
 behaves_like_net_amazon_s3_request 'list bucket with marker' => (
-    request_class   => 'Net::Amazon::S3::Request::ListBucket',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::List::Request',
     with_bucket     => 'some-bucket',
     with_marker     => 'x',
 
