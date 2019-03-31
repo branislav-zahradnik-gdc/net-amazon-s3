@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'list all buckets' => (
-    request_class   => 'Net::Amazon::S3::Request::ListAllMyBuckets',
+    request_class   => 'Net::Amazon::S3::Operation::Service::List::Request',
 
     expect_request_method   => 'GET',
     expect_request_path     => '',

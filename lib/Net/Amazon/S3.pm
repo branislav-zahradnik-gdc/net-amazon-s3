@@ -127,13 +127,14 @@ use Net::Amazon::S3::Request::GetBucketLocationConstraint;
 use Net::Amazon::S3::Request::GetObject;
 use Net::Amazon::S3::Request::GetObjectAccessControl;
 use Net::Amazon::S3::Request::InitiateMultipartUpload;
-use Net::Amazon::S3::Request::ListAllMyBuckets;
 use Net::Amazon::S3::Request::ListBucket;
 use Net::Amazon::S3::Request::ListParts;
 use Net::Amazon::S3::Request::PutObject;
 use Net::Amazon::S3::Request::PutPart;
 use Net::Amazon::S3::Request::SetBucketAccessControl;
 use Net::Amazon::S3::Request::SetObjectAccessControl;
+use Net::Amazon::S3::Operation::Service::List::Request;
+use Net::Amazon::S3::Operation::Service::List::Response;
 use Net::Amazon::S3::Signature::V2;
 use Net::Amazon::S3::Signature::V4;
 use LWP::UserAgent::Determined;
@@ -319,26 +320,23 @@ Returns undef on error, else hashref of results
 sub buckets {
     my $self = shift;
 
-    my $http_request
-        = Net::Amazon::S3::Request::ListAllMyBuckets->new( s3 => $self )
-        ->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Service::List::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Service::List::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+    );
 
-    # die $request->http_request->as_string;
+    return if $response->is_error;
 
-    my $xpc = $self->_send_request($http_request);
-
-    return undef unless $xpc && !$self->_remember_errors($xpc);
-
-    my $owner_id          = $xpc->findvalue("//s3:Owner/s3:ID");
-    my $owner_displayname = $xpc->findvalue("//s3:Owner/s3:DisplayName");
+    my $owner_id          = $response->owner_id;;
+    my $owner_displayname = $response->owner_displayname;
 
     my @buckets;
-    foreach my $node ( $xpc->findnodes(".//s3:Bucket") ) {
+    foreach my $bucket ( $response->buckets ) {
         push @buckets,
             Net::Amazon::S3::Bucket->new(
-            {   bucket => $xpc->findvalue( ".//s3:Name", $node ),
-                creation_date =>
-                    $xpc->findvalue( ".//s3:CreationDate", $node ),
+            {   bucket => $bucket->{name},
+                creation_date => $bucket->{creation_date},
                 account => $self,
             }
             );

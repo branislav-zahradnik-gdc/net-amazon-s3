@@ -5,6 +5,8 @@ use HTTP::Status qw(is_error status_message);
 use MooseX::StrictConstructor 0.16;
 use Moose::Util::TypeConstraints;
 
+use Net::Amazon::S3::Error::Handler::Confess;
+
 # ABSTRACT: An easy-to-use Amazon S3 client
 
 type 'Etag' => where { $_ =~ /^[a-z0-9]{32}(?:-\d+)?$/ };
@@ -19,27 +21,24 @@ sub buckets {
     my $self = shift;
     my $s3   = $self->s3;
 
-    my $http_request
-        = Net::Amazon::S3::Request::ListAllMyBuckets->new( s3 => $s3 )
-        ->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Service::List::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Service::List::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+    );
 
-    my $xpc = $self->_send_request_xpc($http_request);
+    return if $response->is_error;
 
-    my $owner_id
-        = $xpc->findvalue('/s3:ListAllMyBucketsResult/s3:Owner/s3:ID');
-    my $owner_display_name = $xpc->findvalue(
-        '/s3:ListAllMyBucketsResult/s3:Owner/s3:DisplayName');
+    my $owner_id = $response->owner_id;
+    my $owner_display_name = $response->owner_displayname;
 
     my @buckets;
-    foreach my $node (
-        $xpc->findnodes('/s3:ListAllMyBucketsResult/s3:Buckets/s3:Bucket') )
-    {
+    foreach my $bucket ($response->buckets) {
         push @buckets,
             $self->bucket_class->new(
             {   client => $self,
-                name   => $xpc->findvalue( './s3:Name', $node ),
-                creation_date =>
-                    $xpc->findvalue( './s3:CreationDate', $node ),
+                name   => $bucket->{name},
+                creation_date => $bucket->{creation_date},
                 owner_id           => $owner_id,
                 owner_display_name => $owner_display_name,
             }
