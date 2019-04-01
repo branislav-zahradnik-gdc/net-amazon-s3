@@ -584,23 +584,14 @@ string (eg, 'EU'), or undef if no location constraint was set.
 sub get_location_constraint {
     my ($self) = @_;
 
-    my $http_request = Net::Amazon::S3::Request::GetBucketLocationConstraint->new(
-        s3     => $self->account,
-        bucket => $self->bucket,
-    )->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Bucket::Location::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Bucket::Location::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+    );
 
-    my $xpc = $self->account->_send_request($http_request);
-    return undef unless $xpc && !$self->account->_remember_errors($xpc);
-
-    my $lc = $xpc->findvalue("//s3:LocationConstraint");
-
-    # S3 documentation: https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETlocation.html
-    # When the bucket's region is US East (N. Virginia),
-    # Amazon S3 returns an empty string for the bucket's region
-    if ( defined $lc && $lc eq '' ) {
-        $lc = 'us-east-1';
-    }
-    return $lc;
+    return if $response->is_error;
+    return $response->location;
 }
 
 # proxy up the err requests

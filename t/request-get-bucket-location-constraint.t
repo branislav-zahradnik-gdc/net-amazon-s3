@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'get bucket location constraint' => (
-    request_class   => 'Net::Amazon::S3::Request::GetBucketLocationConstraint',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Location::Request',
     with_bucket     => 'some-bucket',
 
     expect_request_method   => 'GET',
