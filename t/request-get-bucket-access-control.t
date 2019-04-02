@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'get bucket access control' => (
-    request_class   => 'Net::Amazon::S3::Request::GetBucketAccessControl',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Acl::Fetch::Request',
     with_bucket     => 'some-bucket',
 
     expect_request_method   => 'GET',

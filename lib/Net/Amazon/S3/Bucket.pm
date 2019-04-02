@@ -485,22 +485,26 @@ sub get_acl {
             bucket => $self->bucket,
             key    => $key,
         )->http_request;
+
+        my $response = $account->_do_http($http_request);
+
+        if ( $response->code == 404 ) {
+            return undef;
+        }
+
+        $account->_croak_if_response_error($response);
+
+        return $response->content;
     } else {
-        $http_request = Net::Amazon::S3::Request::GetBucketAccessControl->new(
-            s3     => $account,
-            bucket => $self->bucket,
-        )->http_request;
+        my $response = $self->_fetch_response (
+            response_class => 'Net::Amazon::S3::Operation::Bucket::Acl::Fetch::Response',
+            request_class  => 'Net::Amazon::S3::Operation::Bucket::Acl::Fetch::Request',
+            error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+        );
+
+        return if $response->is_error;
+        return $response->http_response->content;
     }
-
-    my $response = $account->_do_http($http_request);
-
-    if ( $response->code == 404 ) {
-        return undef;
-    }
-
-    $account->_croak_if_response_error($response);
-
-    return $response->content;
 }
 
 =head2 set_acl
