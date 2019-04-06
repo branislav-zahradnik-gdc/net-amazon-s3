@@ -10,7 +10,7 @@ our @CARP_NOT = __PACKAGE__;
 
 my %croak = map +($_ => 1), (
     #'Net::Amazon::S3::Operation::Object::Fetch::Response',
-    #'Net::Amazon::S3::Operation::Object::Acl::Fetch::Response',
+    'Net::Amazon::S3::Operation::Object::Acl::Fetch::Response',
     'Net::Amazon::S3::Operation::Bucket::Acl::Fetch::Response',
 );
 

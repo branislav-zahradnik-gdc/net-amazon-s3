@@ -480,20 +480,15 @@ sub get_acl {
 
     my $http_request;
     if ($key) {
-        $http_request = Net::Amazon::S3::Request::GetObjectAccessControl->new(
-            s3     => $account,
-            bucket => $self->bucket,
+        my $response = $self->_fetch_response (
+            response_class => 'Net::Amazon::S3::Operation::Object::Acl::Fetch::Response',
+            request_class  => 'Net::Amazon::S3::Operation::Object::Acl::Fetch::Request',
+            error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
             key    => $key,
-        )->http_request;
+        );
 
-        my $response = $account->_do_http($http_request);
-
-        if ( $response->code == 404 ) {
-            return undef;
-        }
-
-        $account->_croak_if_response_error($response);
-
+        return if $response->is_error;
         return $response->content;
     } else {
         my $response = $self->_fetch_response (

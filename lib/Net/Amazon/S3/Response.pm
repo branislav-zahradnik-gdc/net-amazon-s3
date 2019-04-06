@@ -13,6 +13,7 @@ use namespace::clean;
 
 has http_response => (
     is => 'ro',
+    handles => [qw[ content ]],
 );
 
 has xml_document => (
