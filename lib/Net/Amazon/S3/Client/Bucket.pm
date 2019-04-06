@@ -145,9 +145,11 @@ sub delete_multi_object {
     # rather than only objects.
     my $last_result;
     while (scalar(@objects) > 0) {
-        my $http_request = Net::Amazon::S3::Request::DeleteMultiObject->new(
-            s3      => $self->client->s3,
-            bucket  => $self->name,
+        my $response = $self->_fetch_response (
+            response_class => 'Net::Amazon::S3::Operation::Bucket::Objects::Delete::Response',
+            request_class  => 'Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request',
+            error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
             keys    => [map {
                 if (ref($_)) {
                     $_->key
@@ -155,13 +157,11 @@ sub delete_multi_object {
                     $_
                 }
             } splice @objects, 0, ((scalar(@objects) > 1000) ? 1000 : scalar(@objects))]
-        )->http_request;
+        );
 
-        $last_result = $self->client->_send_request($http_request);
+        $last_result = $response->http_response;
 
-        if (!$last_result->is_success()) {
-            last;
-        }
+        last unless $response->is_success;
     }
     return $last_result;
 }

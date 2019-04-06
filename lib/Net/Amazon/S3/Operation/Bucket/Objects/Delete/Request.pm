@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::DeleteMultiObject;
+package Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request;
 
 use Moose 0.85;
 use Digest::MD5 qw/md5 md5_hex/;
@@ -53,7 +53,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::DeleteMultiObject->new(
+  my $http_request = Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request->new(
     s3                  => $s3,
     bucket              => $bucket,
     keys                => [$key1, $key2],

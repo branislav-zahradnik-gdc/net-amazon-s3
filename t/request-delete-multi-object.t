@@ -11,7 +11,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'delete multi object with empty keys' => (
-    request_class   => 'Net::Amazon::S3::Request::DeleteMultiObject',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request',
     with_bucket     => 'some-bucket',
     with_keys       => [],
 
@@ -30,7 +30,7 @@ EOXML
 );
 
 behaves_like_net_amazon_s3_request 'delete multi object with some keys' => (
-    request_class   => 'Net::Amazon::S3::Request::DeleteMultiObject',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request',
     with_bucket     => 'some-bucket',
     with_keys       => [ 'some/key', '<another/key>' ],
 
@@ -51,7 +51,7 @@ EOXML
 );
 
 behaves_like_net_amazon_s3_request 'delete multi object with more than 1_000 keys' => (
-    request_class   => 'Net::Amazon::S3::Request::DeleteMultiObject',
+    request_class   => 'Net::Amazon::S3::Operation::Bucket::Objects::Delete::Request',
     with_bucket     => 'some-bucket',
     with_keys       => [ 0 .. 1_000 ],
 
