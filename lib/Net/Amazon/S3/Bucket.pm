@@ -399,13 +399,15 @@ sub delete_key {
     my ( $self, $key ) = @_;
     croak 'must specify key' unless defined $key && length $key;
 
-    my $http_request = Net::Amazon::S3::Request::DeleteObject->new(
-        s3     => $self->account,
-        bucket => $self->bucket,
-        key    => $key,
-    )->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Delete::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Delete::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
 
-    return $self->account->_send_request_expect_nothing($http_request);
+        key    => $key,
+    );
+
+    return $response->is_success;
 }
 
 =head2 delete_bucket

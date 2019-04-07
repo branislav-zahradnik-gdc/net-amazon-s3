@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'delete object' => (
-    request_class   => 'Net::Amazon::S3::Request::DeleteObject',
+    request_class   => 'Net::Amazon::S3::Operation::Object::Delete::Request',
     with_bucket     => 'some-bucket',
     with_key        => 'some/key',
 

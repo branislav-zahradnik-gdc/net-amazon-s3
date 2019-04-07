@@ -252,13 +252,13 @@ sub put_filename {
 sub delete {
     my $self = shift;
 
-    my $http_request = Net::Amazon::S3::Request::DeleteObject->new(
-        s3     => $self->client->s3,
-        bucket => $self->bucket->name,
-        key    => $self->key,
-    )->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Delete::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Delete::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+    );
 
-    $self->client->_send_request($http_request);
+    return $response->is_success;
 }
 
 sub initiate_multipart_upload {

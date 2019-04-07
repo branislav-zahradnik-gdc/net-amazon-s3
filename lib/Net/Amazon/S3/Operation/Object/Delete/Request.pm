@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::DeleteObject;
+package Net::Amazon::S3::Operation::Object::Delete::Request;
 
 use Moose 0.85;
 use Moose::Util::TypeConstraints;
@@ -19,7 +19,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::DeleteObject->new(
+  my $http_request = Net::Amazon::S3::Operation::Object::Delete::Request->new(
     s3     => $s3,
     bucket => $bucket,
     key    => $key,
