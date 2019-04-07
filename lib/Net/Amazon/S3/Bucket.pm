@@ -270,7 +270,7 @@ with query parameter
 sub query_string_authentication_uri {
     my ( $self, $key, $expires_at ) = @_;
 
-    my $request = Net::Amazon::S3::Request::GetObject->new(
+    my $request = Net::Amazon::S3::Operation::Object::Fetch::Request->new(
         s3     => $self->account,
         bucket => $self,
         key    => $key,
@@ -301,26 +301,17 @@ sub get_key {
     $filename = $$filename if ref $filename;
     my $acct = $self->account;
 
-    my $http_request = Net::Amazon::S3::Request::GetObject->new(
-        s3     => $acct,
-        bucket => $self->bucket,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Fetch::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Fetch::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
         key    => $key,
         method => $method || 'GET',
-    )->http_request;
+    );
 
-    my $response = $acct->_do_http( $http_request, $filename );
-
-    if ( $response->code == 404 ) {
-        return undef;
-    }
-
-    $acct->_croak_if_response_error($response);
-
-    my $etag = $response->header('ETag');
-    if ($etag) {
-        $etag =~ s/^"//;
-        $etag =~ s/"$//;
-    }
+    return if $response->is_error;
+    my $etag = $response->etag;
 
     my $return;
     foreach my $header ( $response->headers->header_field_names ) {

@@ -13,7 +13,13 @@ use namespace::clean;
 
 has http_response => (
     is => 'ro',
-    handles => [qw[ content ]],
+    handles => [
+        qw[ content ],
+        qw[ content_length ],
+        qw[ content_type ],
+        qw[ header ],
+        qw[ headers ],
+    ],
 );
 
 has xml_document => (
@@ -76,6 +82,17 @@ has error_request_id => (
             ? $_[0]->xpath_context->findvalue( '/Error/RequestId' )
             : undef
             ;
+    },
+);
+
+has etag => (
+    is => 'ro',
+    lazy => 1,
+    init_arg => undef,
+    default => sub {
+        my $etag = shift->http_response->header ('ETag');
+        $etag =~ s/ (?:^") | (?:"$) //gx if $etag;
+        $etag;
     },
 );
 

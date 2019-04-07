@@ -82,38 +82,38 @@ __PACKAGE__->meta->make_immutable;
 sub exists {
     my $self = shift;
 
-    my $http_request = Net::Amazon::S3::Request::GetObject->new(
-        s3     => $self->client->s3,
-        bucket => $self->bucket->name,
-        key    => $self->key,
-        method => 'HEAD',
-    )->http_request;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Fetch::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Fetch::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
 
-    my $http_response = $self->client->_send_request_raw($http_request);
-    return $http_response->code == 200 ? 1 : 0;
+        method => 'HEAD',
+    );
+
+    return $response->is_success;
 }
 
 sub _get {
     my $self = shift;
 
-    my $http_request = Net::Amazon::S3::Request::GetObject->new(
-        s3     => $self->client->s3,
-        bucket => $self->bucket->name,
-        key    => $self->key,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Fetch::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Fetch::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
         method => 'GET',
-    )->http_request;
+    );
 
-    my $http_response = $self->client->_send_request($http_request);
-    my $content       = $http_response->content;
-    $self->_load_user_metadata($http_response);
+    my $content       = $response->content;
+    $self->_load_user_metadata($response->http_response);
 
-    my $etag = $self->etag || $self->_etag($http_response);
+    my $etag = $self->etag || $response->etag;
     unless ($self->_is_multipart_etag($etag)) {
         my $md5_hex = md5_hex($content);
         confess 'Corrupted download' if $etag ne $md5_hex;
     }
 
-    return $http_response;
+    return $response->http_response;
 }
 
 sub get {
@@ -129,35 +129,33 @@ sub get_decoded {
 sub get_callback {
     my ( $self, $callback ) = @_;
 
-    my $http_request = Net::Amazon::S3::Request::GetObject->new(
-        s3     => $self->client->s3,
-        bucket => $self->bucket->name,
-        key    => $self->key,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Fetch::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Fetch::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+        filename       => $callback,
+
         method => 'GET',
-    )->http_request;
+    );
 
-    my $http_response
-        = $self->client->_send_request( $http_request, $callback );
-
-    return $http_response;
+    return $response->http_response;
 }
 
 sub get_filename {
     my ( $self, $filename ) = @_;
 
-    my $http_request = Net::Amazon::S3::Request::GetObject->new(
-        s3     => $self->client->s3,
-        bucket => $self->bucket->name,
-        key    => $self->key,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Fetch::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Fetch::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+        filename       => $filename,
+
         method => 'GET',
-    )->http_request;
+    );
 
-    my $http_response
-        = $self->client->_send_request( $http_request, $filename );
+    $self->_load_user_metadata($response->http_response);
 
-    $self->_load_user_metadata($http_response);
-
-    my $etag = $self->etag || $self->_etag($http_response);
+    my $etag = $self->etag || $response->etag;
     unless ($self->_is_multipart_etag($etag)) {
         my $md5_hex = file_md5_hex($filename);
         confess 'Corrupted download' if $etag ne $md5_hex;
@@ -334,7 +332,7 @@ sub list_parts {
 
 sub uri {
     my $self = shift;
-    return Net::Amazon::S3::Request::GetObject->new(
+    return Net::Amazon::S3::Operation::Object::Fetch::Request->new(
         s3     => $self->client->s3,
         bucket => $self->bucket->name,
         key    => $self->key,
@@ -344,7 +342,7 @@ sub uri {
 
 sub query_string_authentication_uri {
     my ($self, $query_form) = @_;
-    return Net::Amazon::S3::Request::GetObject->new(
+    return Net::Amazon::S3::Operation::Object::Fetch::Request->new(
         s3     => $self->client->s3,
         bucket => $self->bucket->name,
         key    => $self->key,
