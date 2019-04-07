@@ -550,17 +550,19 @@ sub set_acl {
     $conf ||= {};
 
     my $key = $conf->{key};
-    my $http_request;
+    my $response;
     if ($key) {
-        $http_request = Net::Amazon::S3::Request::SetObjectAccessControl->new(
-            s3        => $self->account,
-            bucket    => $self->bucket,
+        $response = $self->_fetch_response (
+            response_class => 'Net::Amazon::S3::Operation::Object::Acl::Set::Response',
+            request_class  => 'Net::Amazon::S3::Operation::Object::Acl::Set::Request',
+            error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
             key       => $key,
             acl_short => $conf->{acl_short},
             acl_xml   => $conf->{acl_xml},
-        )->http_request;
+        );
     } else {
-        my $response = $self->_fetch_response (
+        $response = $self->_fetch_response (
             response_class => 'Net::Amazon::S3::Operation::Bucket::Acl::Set::Response',
             request_class  => 'Net::Amazon::S3::Operation::Bucket::Acl::Set::Request',
             error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
@@ -568,13 +570,10 @@ sub set_acl {
             acl_short => $conf->{acl_short},
             acl_xml   => $conf->{acl_xml},
         );
-
-        return if $response->is_error;
-        return 1;
     }
 
-    return $self->account->_send_request_expect_nothing($http_request);
-
+    return if $response->is_error;
+    return 1;
 }
 
 =head2 get_location_constraint

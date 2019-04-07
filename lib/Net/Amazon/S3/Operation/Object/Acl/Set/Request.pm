@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::SetObjectAccessControl;
+package Net::Amazon::S3::Operation::Object::Acl::Set::Request;
 
 use Moose 0.85;
 use MooseX::StrictConstructor 0.16;
@@ -41,7 +41,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::SetObjectAccessControl->new(
+  my $http_request = Net::Amazon::S3::Operation::Object::Acl::Set::Request->new(
     s3        => $s3,
     bucket    => $bucket,
     key       => $key,
