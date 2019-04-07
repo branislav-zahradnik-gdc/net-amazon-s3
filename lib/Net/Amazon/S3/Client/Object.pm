@@ -216,23 +216,23 @@ sub _put {
     $conf->{"x-amz-meta-\L$_"} = $self->user_metadata->{$_}
         for keys %{ $self->user_metadata };
 
-    my $http_request = Net::Amazon::S3::Request::PutObject->new(
-        s3         => $self->client->s3,
-        bucket     => $self->bucket->name,
-        key        => $self->key,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Add::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Add::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
         value      => $value,
         headers    => $conf,
         acl_short  => $self->acl_short,
         encryption => $self->encryption,
-    )->http_request;
+    );
 
-    my $http_response = $self->client->_send_request($http_request);
+    my $http_response = $response->http_response;
 
     confess 'Error uploading ' . $http_response->as_string
         if $http_response->code != 200;
 
-    my $etag = $self->_etag($http_response);
-
+    my $etag = $response->etag;
     confess "Corrupted upload got $etag expected $md5_hex" if $etag ne $md5_hex;
 }
 

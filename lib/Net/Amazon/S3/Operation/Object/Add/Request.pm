@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::PutObject;
+package Net::Amazon::S3::Operation::Object::Add::Request;
 
 use Moose 0.85;
 use MooseX::StrictConstructor 0.16;
@@ -39,7 +39,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::PutObject->new(
+  my $http_request = Net::Amazon::S3::Operation::Object::Add::Request->new(
     s3        => $s3,
     bucket    => $bucket,
     key       => $key,

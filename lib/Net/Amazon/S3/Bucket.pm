@@ -123,21 +123,24 @@ sub add_key {
         delete $conf->{acl_short};
     }
 
-    my $http_request = Net::Amazon::S3::Request::PutObject->new(
-        s3        => $self->account,
-        bucket    => $self->bucket,
+    my %headers = %$conf;
+
+    # we may get a 307 redirect; ask server to signal 100 Continue
+    # before reading the content from CODE reference (_content_sub)
+    $headers{expect} = '100-continue' if ref $value;
+
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Add::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Add::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
         key       => $key,
         value     => $value,
         acl_short => $acl_short,
-        headers   => $conf,
-    )->http_request;
+        headers   => \%headers,
+    );
 
-    if ( ref($value) ) {
-        # we may get a 307 redirect; ask server to signal 100 Continue
-        # before reading the content from CODE reference (_content_sub)
-        $http_request->header('Expect' => '100-continue');
-    }
-    return $self->account->_send_request_expect_nothing($http_request);
+    return $response->is_success;
 }
 
 =head2 add_key_filename
@@ -207,24 +210,18 @@ sub copy_key {
     $conf->{'x-amz-copy-source'} = $source;
 
     my $acct    = $self->account;
-    my $http_request = Net::Amazon::S3::Request::PutObject->new(
-        s3        => $self->account,
-        bucket    => $self->bucket,
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Add::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Add::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Legacy',
+
         key       => $key,
         value     => '',
         acl_short => $acl_short,
         headers   => $conf,
-    )->http_request;
+    );
 
-    my $response = $acct->_do_http( $http_request );
-    my $xpc      = $acct->_xpc_of_content( $response->content );
-
-    if ( !$response->is_success || !$xpc || $xpc->findnodes("//Error") ) {
-        $acct->_remember_errors( $response->content );
-        return 0;
-    }
-
-    return 1;
+    return $response->is_success;
 }
 
 =head2 edit_metadata
