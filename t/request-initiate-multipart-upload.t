@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'initiate multipart upload' => (
-    request_class   => 'Net::Amazon::S3::Request::InitiateMultipartUpload',
+    request_class   => 'Net::Amazon::S3::Operation::Object::Upload::Initialize::Request',
     with_bucket     => 'some-bucket',
     with_key        => 'some/key',
 
@@ -21,7 +21,7 @@ behaves_like_net_amazon_s3_request 'initiate multipart upload' => (
 );
 
 behaves_like_net_amazon_s3_request 'initiate multipart upload with acl' => (
-    request_class   => 'Net::Amazon::S3::Request::InitiateMultipartUpload',
+    request_class   => 'Net::Amazon::S3::Operation::Object::Upload::Initialize::Request',
     with_bucket     => 'some-bucket',
     with_key        => 'some/key',
     with_acl_short  => 'private',
@@ -33,7 +33,7 @@ behaves_like_net_amazon_s3_request 'initiate multipart upload with acl' => (
 );
 
 behaves_like_net_amazon_s3_request 'initiate multipart upload with service side encryption' => (
-    request_class   => 'Net::Amazon::S3::Request::InitiateMultipartUpload',
+    request_class   => 'Net::Amazon::S3::Operation::Object::Upload::Initialize::Request',
     with_bucket     => 'some-bucket',
     with_key        => 'some/key',
     with_encryption => 'AES256',
