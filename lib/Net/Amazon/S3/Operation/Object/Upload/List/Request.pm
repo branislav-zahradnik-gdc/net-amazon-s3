@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::ListParts;
+package Net::Amazon::S3::Operation::Object::Upload::List::Request;
 
 use Moose 0.85;
 use MooseX::StrictConstructor 0.16;

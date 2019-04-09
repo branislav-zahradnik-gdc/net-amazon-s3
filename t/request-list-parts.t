@@ -11,7 +11,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'list parts' => (
-    request_class       => 'Net::Amazon::S3::Request::ListParts',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::List::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_upload_id      => '123',
@@ -23,7 +23,7 @@ behaves_like_net_amazon_s3_request 'list parts' => (
 );
 
 behaves_like_net_amazon_s3_request 'list parts with acl' => (
-    request_class       => 'Net::Amazon::S3::Request::ListParts',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::List::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_upload_id      => '123',
