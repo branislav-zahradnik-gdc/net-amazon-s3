@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'abort multipart upload' => (
-    request_class   => 'Net::Amazon::S3::Request::AbortMultipartUpload',
+    request_class   => 'Net::Amazon::S3::Operation::Object::Upload::Abort::Request',
     with_bucket     => 'some-bucket',
     with_key        => 'some/key',
     with_upload_id  => '123&456',

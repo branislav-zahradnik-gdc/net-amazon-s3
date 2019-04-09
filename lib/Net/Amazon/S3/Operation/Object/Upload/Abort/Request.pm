@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::AbortMultipartUpload;
+package Net::Amazon::S3::Operation::Object::Upload::Abort::Request;
 
 use Moose 0.85;
 use Digest::MD5 qw/md5 md5_hex/;
@@ -19,7 +19,7 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 NAME
 
-Net::Amazon::S3::Request::AbortMultipartUpload - An internal class to abort a multipart upload
+Net::Amazon::S3::Operation::Object::Upload::Abort::Request - An internal class to abort a multipart upload
 
 =head1 VERSION
 
@@ -27,7 +27,7 @@ version 0.59
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::AbortMultipartUpload->new(
+  my $http_request = Net::Amazon::S3::Operation::Object::Upload::Abort::Request->new(
     s3                  => $s3,
     bucket              => $bucket,
     key                 => $key
