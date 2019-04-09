@@ -10,7 +10,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'put object' => (
-    request_class       => 'Net::Amazon::S3::Request::PutPart',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::Part::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_value          => 'foo',
@@ -23,7 +23,7 @@ behaves_like_net_amazon_s3_request 'put object' => (
 );
 
 behaves_like_net_amazon_s3_request 'put object with acl' => (
-    request_class       => 'Net::Amazon::S3::Request::PutPart',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::Part::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_value          => 'foo',

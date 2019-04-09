@@ -317,17 +317,24 @@ sub put_part {
 
     my %args = ref($_[0]) ? %{$_[0]} : @_;
 
-    #set default args
-    $args{s3}       = $self->client->s3;
-    $args{key}      = $self->key;
-    $args{bucket}   = $self->bucket->name;
     #work out content length header
     $args{headers}->{'Content-Length'} = length $args{value}
       if(defined $args{value});
 
-    my $http_request =
-      Net::Amazon::S3::Request::PutPart->new(%args)->http_request;
-    return $self->client->_send_request($http_request);
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Upload::Part::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Upload::Part::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
+
+        upload_id   => $args{upload_id},
+        part_number => $args{part_number},
+        acl_short   => $args{acl_short},
+        copy_source => $args{copy_source},
+        headers     => $args{headers},
+        value       => $args{value},
+    );
+
+    return $response->http_response;
 }
 
 sub list_parts {
