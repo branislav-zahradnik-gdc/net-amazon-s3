@@ -282,14 +282,17 @@ sub complete_multipart_upload {
 
     my %args = ref($_[0]) ? %{$_[0]} : @_;
 
-    #set default args
-    $args{s3}       = $self->client->s3;
-    $args{key}      = $self->key;
-    $args{bucket}   = $self->bucket->name;
+    my $response = $self->_fetch_response (
+        response_class => 'Net::Amazon::S3::Operation::Object::Upload::Complete::Response',
+        request_class  => 'Net::Amazon::S3::Operation::Object::Upload::Complete::Request',
+        error_handler  => 'Net::Amazon::S3::Error::Handler::Confess',
 
-    my $http_request =
-      Net::Amazon::S3::Request::CompleteMultipartUpload->new(%args)->http_request;
-    return $self->client->_send_request($http_request);
+        upload_id    => $args{upload_id},
+        etags        => $args{etags},
+        part_numbers => $args{part_numbers},
+    );
+
+    return $response->http_response;
 }
 
 sub abort_multipart_upload {

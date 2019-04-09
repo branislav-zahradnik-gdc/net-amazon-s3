@@ -1,4 +1,4 @@
-package Net::Amazon::S3::Request::CompleteMultipartUpload;
+package Net::Amazon::S3::Operation::Object::Upload::Complete::Request;
 
 use Moose 0.85;
 use Digest::MD5 qw/md5 md5_hex/;
@@ -56,7 +56,7 @@ no strict 'vars'
 
 =head1 SYNOPSIS
 
-  my $http_request = Net::Amazon::S3::Request::CompleteMultipartUpload->new(
+  my $http_request = Net::Amazon::S3::Operation::Object::Upload::Complete::Request->new(
     s3                  => $s3,
     bucket              => $bucket,
     etags               => \@etags,

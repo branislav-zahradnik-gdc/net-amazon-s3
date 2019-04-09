@@ -11,7 +11,7 @@ use Shared::Examples::Net::Amazon::S3::Request (
 );
 
 behaves_like_net_amazon_s3_request 'abort multipart upload with empty parts' => (
-    request_class       => 'Net::Amazon::S3::Request::CompleteMultipartUpload',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::Complete::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_upload_id      => '123&456',
@@ -31,7 +31,7 @@ EOXML
 );
 
 behaves_like_net_amazon_s3_request 'abort multipart upload with some parts' => (
-    request_class       => 'Net::Amazon::S3::Request::CompleteMultipartUpload',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::Complete::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/key',
     with_upload_id      => '123&456',
@@ -60,7 +60,7 @@ EOXML
 );
 
 behaves_like_net_amazon_s3_request 'abort multipart upload with uneven argument arrays' => (
-    request_class       => 'Net::Amazon::S3::Request::CompleteMultipartUpload',
+    request_class       => 'Net::Amazon::S3::Operation::Object::Upload::Complete::Request',
     with_bucket         => 'some-bucket',
     with_key            => 'some/ %/key',
     with_upload_id      => '123&456',
