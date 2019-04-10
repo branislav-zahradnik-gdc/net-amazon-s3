@@ -76,46 +76,6 @@ sub _send_request_raw {
     return $self->s3->ua->request( $http_request, $filename );
 }
 
-sub _send_request {
-    my ( $self, $http_request, $filename ) = @_;
-
-    my $http_response = $self->_send_request_raw( $http_request, $filename );
-
-    my $content      = $http_response->content;
-    my $content_type = $http_response->content_type;
-    my $code         = $http_response->code;
-
-    if ( is_error($code) ) {
-        if ( $content_type eq 'application/xml' ) {
-            my $xpc = $self->s3->_xpc_of_content ($content);
-
-            if ( $xpc->findnodes('/Error') ) {
-                my $code    = $xpc->findvalue('/Error/Code');
-                my $message = $xpc->findvalue('/Error/Message');
-                confess("$code: $message");
-            } else {
-                confess status_message($code);
-            }
-        } else {
-            confess status_message($code);
-        }
-    }
-    return $http_response;
-}
-
-sub _send_request_content {
-    my ( $self, $http_request, $filename ) = @_;
-    my $http_response = $self->_send_request( $http_request, $filename );
-    return $http_response->content;
-}
-
-sub _send_request_xpc {
-    my ( $self, $http_request, $filename ) = @_;
-    my $http_response = $self->_send_request( $http_request, $filename );
-
-    return $self->s3->_xpc_of_content( $http_response->content );
-}
-
 sub _fetch_response {
     my ($self, %params) = @_;
 

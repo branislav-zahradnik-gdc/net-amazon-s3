@@ -757,21 +757,6 @@ sub _validate_acl_short {
     }
 }
 
-# $self->_send_request($HTTP::Request)
-# $self->_send_request(@params_to_make_request)
-sub _send_request {
-    my ( $self, $http_request ) = @_;
-
-    # warn $http_request->as_string;
-
-    my $response = $self->_do_http($http_request);
-    my $content  = $response->content;
-
-    return $content unless $response->content_type eq 'application/xml';
-    return unless $content;
-    return $self->_xpc_of_content($content);
-}
-
 sub _fetch_response {
     my ($self, %params) = @_;
 
@@ -800,63 +785,6 @@ sub _do_http {
     $self->err(undef);
     $self->errstr(undef);
     return $self->ua->request( $http_request, $filename );
-}
-
-sub _send_request_expect_nothing {
-    my ( $self, $http_request ) = @_;
-
-    # warn $http_request->as_string;
-
-    my $response = $self->_do_http($http_request);
-
-    return 1 if $response->code =~ /^2\d\d$/;
-
-    # anything else is a failure, and we save the parsed result
-    $self->_remember_errors( $response->content );
-    return 0;
-}
-
-sub _croak_if_response_error {
-    my ( $self, $response ) = @_;
-    unless ( $response->code =~ /^2\d\d$/ ) {
-        $self->err("network_error");
-        $self->errstr( $response->status_line );
-        croak "Net::Amazon::S3: Amazon responded with "
-            . $response->status_line . "\n";
-    }
-}
-
-sub _xpc_of_content {
-    my ( $self, $content ) = @_;
-    my $doc = $self->libxml->parse_string($content);
-
-    # warn $doc->toString(1);
-
-    my $xpc = XML::LibXML::XPathContext->new($doc);
-    $xpc->registerNs( 's3', 'http://s3.amazonaws.com/doc/2006-03-01/' );
-
-    return $xpc;
-}
-
-# returns 1 if errors were found
-sub _remember_errors {
-    my ( $self, $src ) = @_;
-
-    # Do not try to parse non-xml
-    unless ( ref $src || $src =~ m/^[[:space:]]*</ ) {
-        ( my $code = $src ) =~ s/^[[:space:]]*\([0-9]*\).*$/$1/;
-        $self->err($code);
-        $self->errstr($src);
-        return 1;
-    }
-
-    my $xpc = ref $src ? $src : $self->_xpc_of_content($src);
-    if ( $xpc->findnodes("//Error") ) {
-        $self->err( $xpc->findvalue("//Error/Code") );
-        $self->errstr( $xpc->findvalue("//Error/Message") );
-        return 1;
-    }
-    return 0;
 }
 
 sub _urlencode {
