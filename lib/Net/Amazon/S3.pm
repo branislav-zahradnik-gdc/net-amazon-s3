@@ -744,16 +744,6 @@ sub delete_key {
     return $bucket->delete_key( $conf->{key} );
 }
 
-sub _validate_acl_short {
-    my ( $self, $policy_name ) = @_;
-
-    if (!grep( { $policy_name eq $_ }
-            qw(private public-read public-read-write authenticated-read) ) )
-    {
-        croak "$policy_name is not a supported canned access policy";
-    }
-}
-
 sub _fetch_response {
     my ($self, %params) = @_;
 
